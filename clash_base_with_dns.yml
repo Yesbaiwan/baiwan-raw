@@ -14,13 +14,12 @@ dns:
     respect-rules: true
     enhanced-mode: fake-ip
     fake-ip-range: 198.18.0.1/16
+    fake-ip-filter: ['*.lan', localhost, '*.local', 'opencode.ai', '*.opencode.ai']
     use-hosts: true
-    default-nameserver: [223.5.5.5, 119.29.29.29]
-    # ========== 死守你原本机场的私有解析，不动 ==========
+    default-nameserver: [180.184.1.1, 180.184.2.2, 1.1.1.1, 1.0.0.1, 119.29.29.29, 182.254.116.116]
     proxy-server-nameserver: ['https://cdn.ookkzz.com/message-chat/hello-cn']
-    proxy-server-nameserver-policy: { Bilibili-image-cdn.juhazf.cn: ['https://cdn.ookkzz.com/message-chat/hello-cn'] }
-    # ================================================
-    nameserver: [223.5.5.5, 119.29.29.29]
-    direct-nameserver: ['https://dns.alidns.com/dns-query', 'https://doh.pub/dns-query']
-    fallback: ['https://cloudflare-dns.com/dns-query', 'https://dns.cloudflare.com/dns-query', 'https://doh.pub/dns-query', 'https://dns.alidns.com/dns-query']
+    proxy-server-nameserver-policy: { 'Bilibili-image-cdn.juhazf.cn': ['https://cdn.ookkzz.com/message-chat/hello-cn'] }
+    nameserver: [180.184.1.1, 180.184.2.2, 1.1.1.1, 1.0.0.1, 119.29.29.29, 182.254.116.116]
+    direct-nameserver: [https://1.1.1.1/dns-query, https://doh.pub/dns-query]
+    fallback: [https://1.1.1.1/dns-query, https://doh.pub/dns-query, https://dns.alidns.com/dns-query]
     fallback-filter: { geoip: true, geoip-code: CN, geosite: [gfw] }
