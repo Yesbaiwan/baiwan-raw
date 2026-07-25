@@ -1,0 +1,14 @@
+mixed-port: 7890
+allow-lan: true
+bind-address: '*'
+mode: rule
+log-level: info
+external-controller: '127.0.0.1:9090'
+dns:
+    enable: true
+    default-nameserver: ['tls://223.5.5.5', 'tls://223.6.6.6']
+    nameserver: ['https://cloudflare-dns.com/dns-query', 'https://dns.google/dns-query']
+    proxy-server-nameserver: ['https://cdn.ookkzz.com/message-chat/hello-cn']
+    proxy-server-nameserver-policy: { Bilibili-image-cdn.juhazf.cn: ['https://cdn.ookkzz.com/message-chat/hello-cn'] }
+    direct-nameserver: ['https://dns.alidns.com/dns-query', 'https://doh.pub/dns-query']
+    respect-rules: true
