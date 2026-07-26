@@ -8,18 +8,58 @@ unified-delay: true
 tcp-concurrent: true
 ipv6: false
 dns:
+    # 参考 https://linux.do/t/topic/1999640
     enable: true
     ipv6: false
-    follow-rule: false
-    respect-rules: true
     enhanced-mode: fake-ip
-    fake-ip-range: 198.18.0.1/16
-    fake-ip-filter: ['*.lan', localhost, '*.local', 'opencode.ai', '*.opencode.ai']
     use-hosts: true
-    default-nameserver: [180.184.1.1, 180.184.2.2, 1.1.1.1, 1.0.0.1, 119.29.29.29, 182.254.116.116]
-    proxy-server-nameserver: ['https://cdn.ookkzz.com/message-chat/hello-cn']
-    proxy-server-nameserver-policy: { 'Bilibili-image-cdn.juhazf.cn': ['https://cdn.ookkzz.com/message-chat/hello-cn'] }
-    nameserver: [180.184.1.1, 180.184.2.2, 1.1.1.1, 1.0.0.1, 119.29.29.29, 182.254.116.116]
-    direct-nameserver: [https://1.1.1.1/dns-query, https://doh.pub/dns-query]
-    fallback: [https://1.1.1.1/dns-query, https://doh.pub/dns-query, https://dns.alidns.com/dns-query]
-    fallback-filter: { geoip: true, geoip-code: CN, geosite: [gfw] }
+
+    # 0. 用于解析下面所有带域名的 DOH 的 DNS
+    default-nameserver:
+        - 180.184.1.1
+        - 180.184.2.2
+        - 119.29.29.29
+        - 223.5.5.5
+
+    # 1. 明确国内域名、apple，走阿里/腾讯
+    nameserver-policy:
+        'geosite:cn,private,apple':
+            - https://doh.pub/dns-query
+            - https://dns.alidns.com/dns-query
+        'Bilibili-image-cdn.juhazf.cn': 'https://cdn.ookkzz.com/message-chat/hello-cn'
+        '*.linux.do': 'https://baiwan.ddd.oaifree.com/query-dns'
+        'linux.do': 'https://baiwan.ddd.oaifree.com/query-dns'
+
+    # 2. 全局默认 DNS 换成国外，并加上 #RULES 强制走代理（分流规则），由于 1.1.1.1 不匹配任何规则，会走到 MATCH，从而让远程节点服务器进行 DNS 解析
+    nameserver:
+        - 'https://1.1.1.1/dns-query#RULES'
+        - 'https://8.8.8.8/dns-query#RULES'
+
+    # 3. 用于解析节点的域名的 DNS
+    proxy-server-nameserver:
+        - 180.184.1.1
+        - 180.184.2.2
+        - 119.29.29.29
+        - 223.5.5.5
+
+    # 4. 解析到最后发现是直连则走此 DNS
+    direct-nameserver:
+        - https://doh.pub/dns-query
+        - https://dns.alidns.com/dns-query
+
+    # 在 direct-nameserver 存在时，依然以 nameserver-policy 优先
+    direct-nameserver-follow-policy: true
+
+    fake-ip-range: 198.18.0.0/16
+    fake-ip-filter:
+        - '*.lan'
+        - '*.local'
+        - '*.arpa'
+        - 'time.*.com'
+        - 'ntp.*.com'
+        - '+.market.xiaomi.com'
+        - 'localhost.ptlogin2.qq.com'
+        - '*.msftncsi.com'
+        - 'www.msftconnecttest.com'
+        - 'opencode.ai'
+        - '*.opencode.ai'
