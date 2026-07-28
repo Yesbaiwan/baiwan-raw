@@ -14,41 +14,33 @@ dns:
     enhanced-mode: fake-ip
     use-hosts: true
 
-    # 0. 用于解析下面所有带域名的 DOH 的 DNS
+    # 0. 引导 DNS（纯 IP，用于解析 DOH 域名）
     default-nameserver:
         - 180.184.1.1
-        - 180.184.2.2
         - 119.29.29.29
         - 223.5.5.5
 
-    # 1. 明确国内域名、apple，走阿里/腾讯
+    # 1. 域名策略（指定域名走指定 DNS）
     nameserver-policy:
         'geosite:cn,private,apple':
-            - https://doh.pub/dns-query
-            - https://dns.alidns.com/dns-query
+            - 180.184.1.1
+            - 119.29.29.29
+            - 223.5.5.5
         'Bilibili-image-cdn.juhazf.cn': 'https://cdn.ookkzz.com/message-chat/hello-cn'
         '*.linux.do': 'https://baiwan.ddd.oaifree.com/query-dns'
         'linux.do': 'https://baiwan.ddd.oaifree.com/query-dns'
 
-    # 2. 全局默认 DNS 换成国外，并加上 #RULES 强制走代理（分流规则），由于 1.1.1.1 不匹配任何规则，会走到 MATCH，从而让远程节点服务器进行 DNS 解析
+    # 2. 默认 DNS（未命中策略的域名，fake-ip 下代理节点自行解析域名）
     nameserver:
-        - 'https://1.1.1.1/dns-query#RULES'
-        - 'https://8.8.8.8/dns-query#RULES'
-
-    # 3. 用于解析节点的域名的 DNS
-    proxy-server-nameserver:
         - 180.184.1.1
-        - 180.184.2.2
         - 119.29.29.29
         - 223.5.5.5
 
-    # 4. 解析到最后发现是直连则走此 DNS
-    direct-nameserver:
-        - https://doh.pub/dns-query
-        - https://dns.alidns.com/dns-query
-
-    # 在 direct-nameserver 存在时，依然以 nameserver-policy 优先
-    direct-nameserver-follow-policy: true
+    # 3. 节点域名 DNS（解析机场节点地址，必须用 IP DNS 避免循环依赖）
+    proxy-server-nameserver:
+        - 180.184.1.1
+        - 119.29.29.29
+        - 223.5.5.5
 
     fake-ip-range: 198.18.0.0/16
     fake-ip-filter:
