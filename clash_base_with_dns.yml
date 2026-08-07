@@ -9,6 +9,7 @@ tcp-concurrent: true
 keep-alive-interval: 15
 keep-alive-idle: 180
 find-process-mode: strict
+global-client-fingerprint: chrome
 ipv6: false
 profile:
     store-selected: true
@@ -86,9 +87,12 @@ proxy-groups:
     - name: ♻️ 自动选择
       type: url-test
       include-all: true
-      url: 'https://cp.cloudflare.com/generate_204'
+      url: 'https://www.gstatic.com/generate_204'
       interval: 300
+      lazy: true
+      timeout: 2000
       tolerance: 50
+      max-failed-times: 3
 
     # 直连组
     - name: 🎯 全球直连
@@ -163,6 +167,16 @@ rule-providers:
         path: ./rule_set/sukkaw_ruleset/reject_ip.txt
 
     # 服务分流
+    cdn_domainset:
+        <<: *RuleSet_domain
+        url: https://ruleset.skk.moe/Clash/domainset/cdn.txt
+        path: ./rule_set/sukkaw_ruleset/cdn_domainset.txt
+
+    cdn_non_ip:
+        <<: *RuleSet_classical
+        url: https://ruleset.skk.moe/Clash/non_ip/cdn.txt
+        path: ./rule_set/sukkaw_ruleset/cdn_non_ip.txt
+
     stream_non_ip:
         <<: *RuleSet_classical
         url: https://ruleset.skk.moe/Clash/non_ip/stream.txt
@@ -172,11 +186,6 @@ rule-providers:
         <<: *RuleSet_classical
         url: https://ruleset.skk.moe/Clash/ip/stream.txt
         path: ./rule_set/sukkaw_ruleset/stream_ip.txt
-
-    ai_non_ip:
-        <<: *RuleSet_classical
-        url: https://ruleset.skk.moe/Clash/non_ip/ai.txt
-        path: ./rule_set/sukkaw_ruleset/ai_non_ip.txt
 
     telegram_non_ip:
         <<: *RuleSet_classical
@@ -202,47 +211,6 @@ rule-providers:
         <<: *RuleSet_classical
         url: https://ruleset.skk.moe/Clash/non_ip/apple_cn.txt
         path: ./rule_set/sukkaw_ruleset/apple_cn_non_ip.txt
-
-    microsoft_cdn_non_ip:
-        <<: *RuleSet_classical
-        url: https://ruleset.skk.moe/Clash/non_ip/microsoft_cdn.txt
-        path: ./rule_set/sukkaw_ruleset/microsoft_cdn_non_ip.txt
-
-    microsoft_non_ip:
-        <<: *RuleSet_classical
-        url: https://ruleset.skk.moe/Clash/non_ip/microsoft.txt
-        path: ./rule_set/sukkaw_ruleset/microsoft_non_ip.txt
-
-    google_non_ip:
-        <<: *RuleSet_domain_mrs
-        url: https://testingcf.jsdelivr.net/gh/QuixoticHeart/rule-set@refs/heads/ruleset/meta/domain/google.mrs
-        path: ./rule_set/other_ruleset/google.mrs
-
-    googlefcm_non_ip:
-        <<: *RuleSet_domain_mrs
-        url: https://testingcf.jsdelivr.net/gh/QuixoticHeart/rule-set@refs/heads/ruleset/meta/domain/googlefcm.mrs
-        path: ./rule_set/other_ruleset/googlefcm.mrs
-
-    google_ip:
-        <<: *RuleSet_ipcidr_mrs
-        url: https://testingcf.jsdelivr.net/gh/QuixoticHeart/rule-set@refs/heads/ruleset/meta/ipcidr/google.mrs
-        path: ./rule_set/other_ruleset/google_ip.mrs
-
-    googlefcm_ip:
-        <<: *RuleSet_ipcidr_mrs
-        url: https://testingcf.jsdelivr.net/gh/QuixoticHeart/rule-set@refs/heads/ruleset/meta/ipcidr/googlefcm.mrs
-        path: ./rule_set/other_ruleset/googlefcm_ip.mrs
-
-    # 大文件下载
-    download_domainset:
-        <<: *RuleSet_domain
-        url: https://ruleset.skk.moe/Clash/domainset/download.txt
-        path: ./rule_set/sukkaw_ruleset/download_domainset.txt
-
-    download_non_ip:
-        <<: *RuleSet_domain
-        url: https://ruleset.skk.moe/Clash/non_ip/download.txt
-        path: ./rule_set/sukkaw_ruleset/download_non_ip.txt
 
     # 内网和国内
     lan_non_ip:
@@ -289,24 +257,19 @@ rules:
     # =============================================
 
     # 广告/骚扰拦截
+    - RULE-SET,reject_non_ip_drop,REJECT-DROP
     - RULE-SET,reject_non_ip,🛑 全球拦截
     - RULE-SET,reject_domainset,🛑 全球拦截
-    - RULE-SET,reject_non_ip_drop,REJECT-DROP
     - RULE-SET,reject_non_ip_no_drop,🛑 全球拦截
 
     # 服务分流
-    - RULE-SET,ai_non_ip,🚀 节点选择
+    - RULE-SET,cdn_domainset,🚀 节点选择
+    - RULE-SET,cdn_non_ip,🚀 节点选择
     - RULE-SET,stream_non_ip,🚀 节点选择
     - RULE-SET,telegram_non_ip,🚀 节点选择
     - RULE-SET,apple_cdn,DIRECT
-    - RULE-SET,download_domainset,🎯 全球直连
-    - RULE-SET,download_non_ip,🎯 全球直连
-    - RULE-SET,microsoft_cdn_non_ip,DIRECT
     - RULE-SET,apple_cn_non_ip,DIRECT
     - RULE-SET,apple_services,🎯 全球直连
-    - RULE-SET,google_non_ip,🚀 节点选择
-    - RULE-SET,googlefcm_non_ip,🚀 节点选择
-    - RULE-SET,microsoft_non_ip,🎯 全球直连
     - RULE-SET,global_non_ip,🚀 节点选择
     - RULE-SET,domestic_non_ip,DIRECT
     - RULE-SET,cn,DIRECT
@@ -317,8 +280,6 @@ rules:
     - RULE-SET,reject_ip,REJECT
     - RULE-SET,telegram_ip,🚀 节点选择,no-resolve
     - RULE-SET,stream_ip,🚀 节点选择
-    - RULE-SET,google_ip,🚀 节点选择,no-resolve
-    - RULE-SET,googlefcm_ip,🚀 节点选择,no-resolve
     - RULE-SET,lan_ip,DIRECT,no-resolve
     - RULE-SET,domestic_ip,DIRECT
     - RULE-SET,china_ip,DIRECT
