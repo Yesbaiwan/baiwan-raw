@@ -253,6 +253,8 @@ rules:
     # ========== 自定义规则（最高优先级） ==========
     - DOMAIN-SUFFIX,hf.space,🎯 全球直连
     - DOMAIN-SUFFIX,opencode.ai,🎯 全球直连
+    - DOMAIN-SUFFIX,z.ai,🎯 全球直连
+    - DOMAIN-SUFFIX,ruoli.dev,🎯 全球直连
     - DOMAIN-SUFFIX,jable.tv,🚀 节点选择
     # =============================================
 
