@@ -257,6 +257,7 @@ rules:
     - DOMAIN-SUFFIX,ruoli.dev,🎯 全球直连
     - DOMAIN,sfo1.aihub.zeabur.ai,🎯 全球直连
     - DOMAIN,hnd1.aihub.zeabur.ai,🎯 全球直连
+    - DOMAIN-SUFFIX,immersivetranslate.com,🎯 全球直连
     - DOMAIN-SUFFIX,jable.tv,🚀 节点选择
     # =============================================
 
