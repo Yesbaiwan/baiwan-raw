@@ -13,19 +13,23 @@ export default {
                 <string>HTTPS</string>
                 <key>ServerURL</key>
                 <string>https://baiwan.ddd.oaifree.com:443/query-dns</string>
+                <key>SupplementalMatchDomains</key>
+                <array>
+                    <string>linux.do</string>
+                </array>
             </dict>
             <key>PayloadDescription</key>
-            <string>Baiwan 自用DNS配置</string>
+            <string>Baiwan 自用DNS - 仅 linux.do</string>
             <key>PayloadDisplayName</key>
             <string>Baiwan DNS</string>
             <key>PayloadIdentifier</key>
-            <string>com.baiwan.dns</string>
+            <string>com.baiwan.dns.linuxdo</string>
             <key>PayloadOrganization</key>
             <string>Baiwan</string>
             <key>PayloadType</key>
             <string>com.apple.dnsSettings.managed</string>
             <key>PayloadUUID</key>
-            <string>15eb0b04-beec-4ed4-afab-90458bc84cf0</string>
+            <string>0f762990-dbff-4402-a8c7-f1864f33acff</string>
             <key>PayloadVersion</key>
             <integer>1</integer>
         </dict>
