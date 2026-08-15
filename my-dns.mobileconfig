@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>PayloadContent</key>
+    <array>
+        <dict>
+            <key>DNSSettings</key>
+            <dict>
+                <key>DNSProtocol</key>
+                <string>HTTPS</string>
+                <key>ServerURL</key>
+                <string>https://baiwan.ddd.oaifree.com/query-dns</string>
+            </dict>
+            <key>PayloadDescription</key>
+            <string>Baiwan 自定义 DNS 配置</string>
+            <key>PayloadDisplayName</key>
+            <string>Baiwan DNS</string>
+            <key>PayloadIdentifier</key>
+            <string>com.baiwan.dns</string>
+            <key>PayloadOrganization</key>
+            <string>Baiwan</string>
+            <key>PayloadType</key>
+            <string>com.apple.dnsSettings.managed</string>
+            <key>PayloadUUID</key>
+            <string>15eb0b04-beec-4ed4-afab-90458bc84cf0</string>
+            <key>PayloadVersion</key>
+            <integer>1</integer>
+        </dict>
+    </array>
+    <key>PayloadDescription</key>
+    <string>Baiwan DNS 描述文件</string>
+    <key>PayloadDisplayName</key>
+    <string>Baiwan DNS</string>
+    <key>PayloadIdentifier</key>
+    <string>com.baiwan.dns.profile</string>
+    <key>PayloadOrganization</key>
+    <string>Baiwan</string>
+    <key>PayloadRemovalDisallowed</key>
+    <false/>
+    <key>PayloadScope</key>
+    <string>System</string>
+    <key>PayloadType</key>
+    <string>Configuration</string>
+    <key>PayloadUUID</key>
+    <string>5aec7058-6605-4924-9563-7509887ba327</string>
+    <key>PayloadVersion</key>
+    <integer>1</integer>
+</dict>
+</plist>
