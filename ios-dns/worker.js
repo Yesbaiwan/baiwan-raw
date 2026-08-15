@@ -1,4 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
+export default {
+    async fetch(request) {
+        const mobileconfig = `<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
@@ -47,4 +49,13 @@
     <key>PayloadVersion</key>
     <integer>1</integer>
 </dict>
-</plist>
+</plist>`;
+
+        return new Response(mobileconfig, {
+            headers: {
+                'Content-Type': 'application/x-apple-aspen-config; charset=utf-8',
+                'Content-Disposition': 'attachment; filename="baiwan-dns.mobileconfig"',
+            },
+        });
+    },
+};
