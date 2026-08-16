@@ -38,8 +38,8 @@ dns:
             - 119.29.29.29
             - 223.5.5.5
         'Bilibili-image-cdn.juhazf.cn': 'https://cdn.ookkzz.com/message-chat/hello-cn'
-        '*.linux.do': 'https://baiwan.ddd.oaifree.com/query-dns'
-        'linux.do': 'https://baiwan.ddd.oaifree.com/query-dns'
+        '*.linux.do': 'https://baiwan.ddd.oaifree.com:443/query-dns'
+        'linux.do': 'https://baiwan.ddd.oaifree.com:443/query-dns'
         # 广告/骚扰域名在 DNS 层直接返回空解析
         'rule-set:reject_non_ip,reject_domainset,reject_non_ip_drop,reject_non_ip_no_drop': [rcode://success]
 
