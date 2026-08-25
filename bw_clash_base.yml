@@ -9,7 +9,6 @@ tcp-concurrent: true
 keep-alive-interval: 15
 keep-alive-idle: 180
 find-process-mode: strict
-global-client-fingerprint: chrome
 ipv6: false
 profile:
     store-selected: true
