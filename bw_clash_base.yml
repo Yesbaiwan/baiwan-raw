@@ -9,6 +9,7 @@ tcp-concurrent: true
 keep-alive-interval: 15
 keep-alive-idle: 180
 find-process-mode: strict
+global-client-fingerprint: chrome
 ipv6: false
 profile:
     store-selected: true
@@ -17,7 +18,6 @@ profile:
 ### DNS 配置
 dns:
     enable: true
-    listen: 0.0.0.0:1053
     ipv6: false
     enhanced-mode: fake-ip
     prefer-h3: true
@@ -82,19 +82,6 @@ sniffer:
         - 'Mijia Cloud'
         - dlg.io.mi.com
         - '+.push.apple.com'
-
-### TUN 模式
-tun:
-    enable: false
-    stack: system
-    device: Ethernet 99
-    auto-route: true
-    auto-detect-interface: true
-    dns-hijack:
-        - any:53
-        - tcp://any:53
-    strict-route: true
-    mtu: 1500
 
 ### 策略组（保持精简，无地区/应用分组）
 proxy-groups:
