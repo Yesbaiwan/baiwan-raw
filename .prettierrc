@@ -1,5 +1,15 @@
 {
-  "printWidth": 160,
-  "tabWidth": 4,
-  "singleQuote": true
+    "printWidth": 160,
+    "tabWidth": 4,
+    "singleQuote": true,
+    "plugins": ["prettier-plugin-yaml"],
+    "overrides": [
+        {
+            "files": ["*.yaml", "*.yml"],
+            "options": {
+                "printWidth": 10000,
+                "yamlCollectionStyle": "flow"
+            }
+        }
+    ]
 }

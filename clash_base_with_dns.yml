@@ -1,4 +1,4 @@
-### 参考自 https://github.com/yyhhyyyyyy/selfproxy
+### 参考自 https://github.com/Seameee/override-hub/blob/main/selfuse_test_remote.yaml
 ### 全局配置
 mixed-port: 7890
 allow-lan: false
@@ -37,10 +37,18 @@ dns:
             - 180.184.1.1
             - 119.29.29.29
             - 223.5.5.5
-        'Bilibili-image-cdn.juhazf.cn': 'https://cdn.ookkzz.com/message-chat/hello-cn'
-        '*.linux.do': 'https://baiwan.ddd.oaifree.com:443/query-dns'
-        'linux.do': 'https://baiwan.ddd.oaifree.com:443/query-dns'
-        # 广告/骚扰域名在 DNS 层直接返回空解析
+        'DOMAIN-SUFFIX,linux.do': 'https://baiwan.ddd.oaifree.com:443/query-dns'
+        # 自定义域名专用 DoH（DOMAIN-SUFFIX 官方格式）
+        'DOMAIN-SUFFIX,acczzz.com':
+            - https://custom.juhazf.cn/inst
+            - https://cdn.ookkzz.com/message-chat/hello-cn
+        'DOMAIN-SUFFIX,hi2026.net':
+            - https://custom.juhazf.cn/inst
+            - https://cdn.ookkzz.com/message-chat/hello-cn
+        'DOMAIN-SUFFIX,juhazf.cn':
+            - https://custom.juhazf.cn/inst
+            - https://cdn.ookkzz.com/message-chat/hello-cn
+        # 广告/骚扰域名在 DNS 层直接返回空解析（与 Self 一致）
         'rule-set:reject_non_ip,reject_domainset,reject_non_ip_drop,reject_non_ip_no_drop': [rcode://success]
 
     # 默认 DNS（未命中策略的域名走 DoH 防污染，fake-ip 下代理节点自行解析域名）
@@ -99,11 +107,6 @@ proxy-groups:
       type: select
       proxies: [DIRECT, 🚀 节点选择, ♻️ 自动选择]
 
-    # 拦截组
-    - name: 🛑 全球拦截
-      type: select
-      proxies: [REJECT, DIRECT]
-
     # 兜底组
     - name: 🐟 漏网之鱼
       type: select
@@ -140,7 +143,7 @@ rule-providers:
         url: https://testingcf.jsdelivr.net/gh/DustinWin/ruleset_geodata@mihomo-ruleset/trackerslist.mrs
         path: ./rule_set/other_ruleset/trackerslist.mrs
 
-    # 广告/骚扰拦截
+    # 广告/骚扰拦截（与 Self 一致）
     reject_non_ip_no_drop:
         <<: *RuleSet_classical
         url: https://ruleset.skk.moe/Clash/non_ip/reject-no-drop.txt
@@ -167,16 +170,6 @@ rule-providers:
         path: ./rule_set/sukkaw_ruleset/reject_ip.txt
 
     # 服务分流
-    cdn_domainset:
-        <<: *RuleSet_domain
-        url: https://ruleset.skk.moe/Clash/domainset/cdn.txt
-        path: ./rule_set/sukkaw_ruleset/cdn_domainset.txt
-
-    cdn_non_ip:
-        <<: *RuleSet_classical
-        url: https://ruleset.skk.moe/Clash/non_ip/cdn.txt
-        path: ./rule_set/sukkaw_ruleset/cdn_non_ip.txt
-
     stream_non_ip:
         <<: *RuleSet_classical
         url: https://ruleset.skk.moe/Clash/non_ip/stream.txt
@@ -211,6 +204,55 @@ rule-providers:
         <<: *RuleSet_classical
         url: https://ruleset.skk.moe/Clash/non_ip/apple_cn.txt
         path: ./rule_set/sukkaw_ruleset/apple_cn_non_ip.txt
+
+    # AI 服务
+    ai_non_ip:
+        <<: *RuleSet_classical
+        url: https://ruleset.skk.moe/Clash/non_ip/ai.txt
+        path: ./rule_set/sukkaw_ruleset/ai_non_ip.txt
+
+    # 谷歌服务
+    google_non_ip:
+        <<: *RuleSet_domain_mrs
+        url: https://testingcf.jsdelivr.net/gh/QuixoticHeart/rule-set@refs/heads/ruleset/meta/domain/google.mrs
+        path: ./rule_set/other_ruleset/google.mrs
+
+    googlefcm_non_ip:
+        <<: *RuleSet_domain_mrs
+        url: https://testingcf.jsdelivr.net/gh/QuixoticHeart/rule-set@refs/heads/ruleset/meta/domain/googlefcm.mrs
+        path: ./rule_set/other_ruleset/googlefcm.mrs
+
+    google_ip:
+        <<: *RuleSet_ipcidr_mrs
+        url: https://testingcf.jsdelivr.net/gh/QuixoticHeart/rule-set@refs/heads/ruleset/meta/ipcidr/google.mrs
+        path: ./rule_set/other_ruleset/google_ip.mrs
+
+    googlefcm_ip:
+        <<: *RuleSet_ipcidr_mrs
+        url: https://testingcf.jsdelivr.net/gh/QuixoticHeart/rule-set@refs/heads/ruleset/meta/ipcidr/googlefcm.mrs
+        path: ./rule_set/other_ruleset/googlefcm_ip.mrs
+
+    # 微软服务
+    microsoft_cdn_non_ip:
+        <<: *RuleSet_classical
+        url: https://ruleset.skk.moe/Clash/non_ip/microsoft_cdn.txt
+        path: ./rule_set/sukkaw_ruleset/microsoft_cdn_non_ip.txt
+
+    microsoft_non_ip:
+        <<: *RuleSet_classical
+        url: https://ruleset.skk.moe/Clash/non_ip/microsoft.txt
+        path: ./rule_set/sukkaw_ruleset/microsoft_non_ip.txt
+
+    # 软件更新、操作系统等大文件下载
+    download_domainset:
+        <<: *RuleSet_domain
+        url: https://ruleset.skk.moe/Clash/domainset/download.txt
+        path: ./rule_set/sukkaw_ruleset/download_domainset.txt
+
+    download_non_ip:
+        <<: *RuleSet_classical
+        url: https://ruleset.skk.moe/Clash/non_ip/download.txt
+        path: ./rule_set/sukkaw_ruleset/download_non_ip.txt
 
     # 内网和国内
     lan_non_ip:
@@ -261,20 +303,25 @@ rules:
     - DOMAIN-SUFFIX,jable.tv,🚀 节点选择
     # =============================================
 
-    # 广告/骚扰拦截
+    # 广告/骚扰拦截（最高优先级，与 Self 一致）
+    - RULE-SET,reject_non_ip,REJECT
+    - RULE-SET,reject_domainset,REJECT
     - RULE-SET,reject_non_ip_drop,REJECT-DROP
-    - RULE-SET,reject_non_ip,🛑 全球拦截
-    - RULE-SET,reject_domainset,🛑 全球拦截
-    - RULE-SET,reject_non_ip_no_drop,🛑 全球拦截
+    - RULE-SET,reject_non_ip_no_drop,REJECT
 
     # 服务分流
-    - RULE-SET,cdn_domainset,🚀 节点选择
-    - RULE-SET,cdn_non_ip,🚀 节点选择
+    - RULE-SET,ai_non_ip,🚀 节点选择
     - RULE-SET,stream_non_ip,🚀 节点选择
     - RULE-SET,telegram_non_ip,🚀 节点选择
     - RULE-SET,apple_cdn,DIRECT
+    - RULE-SET,download_domainset,🚀 节点选择
+    - RULE-SET,download_non_ip,🚀 节点选择
+    - RULE-SET,microsoft_cdn_non_ip,DIRECT
     - RULE-SET,apple_cn_non_ip,DIRECT
     - RULE-SET,apple_services,🎯 全球直连
+    - RULE-SET,google_non_ip,🚀 节点选择
+    - RULE-SET,googlefcm_non_ip,🚀 节点选择
+    - RULE-SET,microsoft_non_ip,🚀 节点选择
     - RULE-SET,global_non_ip,🚀 节点选择
     - RULE-SET,domestic_non_ip,DIRECT
     - RULE-SET,cn,DIRECT
@@ -285,6 +332,8 @@ rules:
     - RULE-SET,reject_ip,REJECT
     - RULE-SET,telegram_ip,🚀 节点选择,no-resolve
     - RULE-SET,stream_ip,🚀 节点选择
+    - RULE-SET,google_ip,🚀 节点选择,no-resolve
+    - RULE-SET,googlefcm_ip,🚀 节点选择,no-resolve
     - RULE-SET,lan_ip,DIRECT,no-resolve
     - RULE-SET,domestic_ip,DIRECT
     - RULE-SET,china_ip,DIRECT
