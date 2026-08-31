@@ -106,6 +106,8 @@ rule-providers:
     microsoft_domain: { <<: *RuleSet_domain, url: 'https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/microsoft.mrs', path: ./rule_set/geosite/microsoft.mrs }
     google_domain: { <<: *RuleSet_domain, url: 'https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/google.mrs', path: ./rule_set/geosite/google.mrs }
     telegram_domain: { <<: *RuleSet_domain, url: 'https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/telegram.mrs', path: ./rule_set/geosite/telegram.mrs }
+    github_domain: { <<: *RuleSet_domain, url: 'https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/github.mrs', path: ./rule_set/geosite/github.mrs }
+    ai_domain: { <<: *RuleSet_domain, url: 'https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/category-ai-!cn.mrs', path: ./rule_set/geosite/category-ai-!cn.mrs }
     # 国内 IP
     china_ip: { <<: *RuleSet_ipcidr, url: 'https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/cn.mrs', path: ./rule_set/geosite/china_ip.mrs }
 
@@ -122,7 +124,8 @@ rules:
     - DOMAIN-SUFFIX,gh-proxy.org,🎯 全球直连
     - DOMAIN,sfo1.aihub.zeabur.ai,🎯 全球直连
     - DOMAIN,hnd1.aihub.zeabur.ai,🎯 全球直连
-    - DOMAIN-SUFFIX,github.com,🚀 节点选择
+    - RULE-SET,github_domain,🚀 节点选择
+    - RULE-SET,ai_domain,🚀 节点选择
     - DOMAIN-SUFFIX,jable.tv,🚀 节点选择
     # =============================================
 
