@@ -122,6 +122,7 @@ rules:
     - DOMAIN-SUFFIX,gh-proxy.org,🎯 全球直连
     - DOMAIN,sfo1.aihub.zeabur.ai,🎯 全球直连
     - DOMAIN,hnd1.aihub.zeabur.ai,🎯 全球直连
+    - DOMAIN-SUFFIX,github.com,🚀 节点选择
     - DOMAIN-SUFFIX,jable.tv,🚀 节点选择
     # =============================================
 
