@@ -91,6 +91,8 @@ RuleSet_classical: &RuleSet_classical { type: http, behavior: classical, interva
 
 ### 订阅规则
 rule-providers:
+    # 番茄小说去广告（仓库本地文件，经 gh-proxy 加速）
+    fanqie_ads: { <<: *RuleSet_classical, url: 'https://cdn.gh-proxy.org/https://raw.githubusercontent.com/Yesbaiwan/baiwan-raw/refs/heads/main/fanqie/fanqie_ads.list', path: ./rule_set/fanqie_ads.list }
     # 广告/骚扰拦截
     reject_non_ip_no_drop: { <<: *RuleSet_classical, url: 'https://cdn.jsdelivr.net/gh/SukkaLab/ruleset.skk.moe@master/Clash/non_ip/reject-no-drop.txt', path: ./rule_set/sukkaw_ruleset/reject_non_ip_no_drop.txt }
     reject_non_ip_drop: { <<: *RuleSet_classical, url: 'https://cdn.jsdelivr.net/gh/SukkaLab/ruleset.skk.moe@master/Clash/non_ip/reject-drop.txt', path: ./rule_set/sukkaw_ruleset/reject_non_ip_drop.txt }
@@ -124,6 +126,10 @@ rules:
     - DOMAIN-SUFFIX,gh-proxy.org,🎯 全球直连
     - DOMAIN,sfo1.aihub.zeabur.ai,🎯 全球直连
     - DOMAIN,hnd1.aihub.zeabur.ai,🎯 全球直连
+
+    # 番茄小说去广告（独立规则文件 fanqie_ads.list，只拦广告域不碰内容 CDN）
+    - RULE-SET,fanqie_ads,REJECT
+
     - RULE-SET,github_domain,🚀 节点选择
     - RULE-SET,ai_domain,🚀 节点选择
     - DOMAIN-SUFFIX,jable.tv,🚀 节点选择
