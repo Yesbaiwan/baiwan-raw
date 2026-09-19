@@ -1,6 +1,6 @@
 ### 桌面 + iOS 通用单文件
 ### 设计: 白名单直连 + 核心服务分流，其余一律走节点；无地区/应用/特殊分组；4 策略组
-### 广告拦截: 内置 GEOSITE + SukkaLab reject 系列 + ACL4SSR BanEasyListChina
+### 广告拦截: anti-AD (mihomo.mrs) + SukkaLab reject 系列
 ### iOS 兼容: 规则集走 cdn.jsdelivr.net 不带 proxy 字段；fake-ip-filter 不引规则集；保留 include-all
 ### 使用: Sub-Store / 订阅转换把机场订阅合并进 include-all 策略组
 
@@ -37,7 +37,7 @@ dns:
         # 国内域名用裸 IP 直连更快
         'geosite:cn,private,apple': [180.184.1.1, 119.29.29.29, 223.5.5.5]
         # 广告域名在 DNS 层直接返回空解析
-        'geosite:category-ads-all': [rcode://success]
+        'rule-set:anti_ad': [rcode://success]
         'rule-set:reject_non_ip,reject_non_ip_drop,reject_non_ip_no_drop': [rcode://success]
         # linux.do 走指定 DNS
         'DOMAIN-SUFFIX,linux.do': 'https://baiwan.ddd.oaifree.com:443/query-dns'
@@ -96,8 +96,8 @@ rule-providers:
     reject_non_ip_drop: { <<: *RuleSet_classical, url: 'https://cdn.jsdelivr.net/gh/SukkaLab/ruleset.skk.moe@master/Clash/non_ip/reject-drop.txt', path: ./rule_set/sukkaw_ruleset/reject_non_ip_drop.txt }
     reject_non_ip: { <<: *RuleSet_classical, url: 'https://cdn.jsdelivr.net/gh/SukkaLab/ruleset.skk.moe@master/Clash/non_ip/reject.txt', path: ./rule_set/sukkaw_ruleset/reject_non_ip.txt }
     reject_ip: { <<: *RuleSet_classical, url: 'https://cdn.jsdelivr.net/gh/SukkaLab/ruleset.skk.moe@master/Clash/ip/reject.txt', path: ./rule_set/sukkaw_ruleset/reject_ip.txt }
-    # 中国广告全量
-    ban_easylist_china: { <<: *RuleSet_classical, url: 'https://cdn.jsdelivr.net/gh/ACL4SSR/ACL4SSR@master/Clash/BanEasyListChina.list', path: ./rule_set/other_ruleset/ban_easylist_china.txt }
+    # 中国广告全量（anti-AD，已合并 easylist/ACL4SSR/yhosts 等上游）
+    anti_ad: { <<: *RuleSet_domain, url: 'https://cdn.jsdelivr.net/gh/privacy-protection-tools/anti-ad.github.io@master/docs/mihomo.mrs', path: ./rule_set/other_ruleset/anti_ad.mrs }
 
     # 核心服务
     cn_domain: { <<: *RuleSet_domain, url: 'https://cdn.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/cn.mrs', path: ./rule_set/geosite/cn.mrs }
@@ -129,16 +129,18 @@ rules:
     - DOMAIN-SUFFIX,jable.tv,🚀 节点选择
     # =============================================
 
-    # 广告/骚扰拦截
-    - GEOSITE,category-ads-all,REJECT
+    # 广告/骚扰拦截（anti-AD + SukkaLab）
+    - RULE-SET,anti_ad,REJECT
     - RULE-SET,reject_non_ip,REJECT
     - RULE-SET,reject_non_ip_drop,REJECT-DROP
     - RULE-SET,reject_non_ip_no_drop,REJECT
-    - RULE-SET,ban_easylist_china,REJECT
 
     # 私网/局域网
     - RULE-SET,private_domain,DIRECT
     - GEOIP,LAN,DIRECT,no-resolve
+
+    # IP 类广告拦截（需在 china_ip 直连之前）
+    - RULE-SET,reject_ip,REJECT
 
     # 核心服务
     - RULE-SET,apple_domain,DIRECT
@@ -149,9 +151,6 @@ rules:
     # 国内直连
     - RULE-SET,cn_domain,DIRECT
     - RULE-SET,china_ip,DIRECT,no-resolve
-
-    # IP 类广告拦截
-    - RULE-SET,reject_ip,REJECT
 
     # 兜底
     - MATCH,🐟 漏网之鱼
