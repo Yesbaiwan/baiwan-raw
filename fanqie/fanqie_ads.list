@@ -1,0 +1,78 @@
+# 番茄小说去广告规则 (Clash classical / Shadowrocket RULE-SET 通用格式)
+#
+# 引用: Clash  -> rule-provider(behavior: classical) -> RULE-SET,fanqie_ads,REJECT
+#       小火箭 -> RULE-SET,<本文件URL>,REJECT
+#
+# 只拦「广告 SDK / 广告素材 / 埋点上报」域名, 不碰正文 API 与书籍封面、正文图片。
+#
+# 来源(合并去重后重写):
+#   [A] https://github.com/deezertidal/shadowrocket-rules/blob/main/modules/fanqie.module
+#   [B] https://github.com/honue/rules/blob/master/Loon/plugin/FanQieNovel.plugin
+#   [C] https://github.com/changzhaoCZ/fqnovel-adrules/blob/master/fqnovel-fxxk_ads
+#   [D] https://github.com/zqzess/rule_for_quantumultX/blob/master/AdguardHome/FanQieNovel.txt
+#       A=deezertidal 模块  B=honue 插件(A 的超集)  C=番茄屠龙刀(规则最新)  D=2022 旧版, 仅作对照
+#
+# 下列域名番茄自带、需放行, 故意不拦(拦了会坏功能):
+#   reading.snssdk.com / security.snssdk.com / lf-fe.fqnovelstatic.com
+#   lf-normal-gr-sourcecdn.bytegecko.com / api*-sinfnormal.fqnovel.com
+#   api5-normal-sinfonlinec.fqnovel.com/reading/bookapi/ / p3-novel1-sign.byteimg.com
+
+### 一、广告 SDK 基础设施: 穿山甲 / 巨量
+DOMAIN-SUFFIX,pangolin-sdk-toutiao.com
+DOMAIN-SUFFIX,pangolin-sdk-toutiao-b.com
+DOMAIN-SUFFIX,pangolin-sdk-toutiao1.com
+DOMAIN-SUFFIX,pangolin-sdk-toutiao2.com
+DOMAIN-SUFFIX,pangolin-sdk-toutiao3.com
+DOMAIN-SUFFIX,pangolin-sdk-toutiao4.com
+DOMAIN-SUFFIX,pangolin-sdk-toutiao5.com
+DOMAIN-SUFFIX,pangolin-dsp-toutiao.com
+DOMAIN-SUFFIX,pangolin-dsp-toutiao-b.com
+DOMAIN-SUFFIX,pglstatp-toutiao.com
+DOMAIN-SUFFIX,pglstatp-toutiao-b.com
+DOMAIN-SUFFIX,pglstatp-sdk-toutiao.com
+DOMAIN-SUFFIX,pglstatp-snssdk-toutiao.com
+DOMAIN-SUFFIX,bytegoofy.com
+DOMAIN-SUFFIX,byteorge.com
+
+### 二、广告素材与签名域
+# 覆盖 p3/p6/p9-ad-sign.byteimg.com 及后续新增线路
+DOMAIN-KEYWORD,ad-sign.byteimg.com
+
+### 三、埋点 / 日志上报域
+DOMAIN,mon.zijieapi.com
+DOMAIN,mssdk.zijieapi.com
+DOMAIN,polaris.zijieapi.com
+DOMAIN,feedback-c.zijieapi.com
+DOMAIN-KEYWORD,ads3-normal
+DOMAIN-KEYWORD,ads5-normal
+DOMAIN-KEYWORD,bsync3-normal
+DOMAIN-KEYWORD,mssdk3-normal
+DOMAIN-KEYWORD,polaris3-normal
+DOMAIN,dig.bdurl.net
+DOMAIN,dig.zjurl.cn
+DOMAIN,mon.snssdk.com
+DOMAIN,mcs.snssdk.com
+DOMAIN,vas-lf-x.snssdk.com
+DOMAIN,toblog.ctobsnssdk.com
+DOMAIN,is.snssdk.com
+DOMAIN,i.snssdk.com
+DOMAIN,i-lq.snssdk.com
+DOMAIN,security-lq.snssdk.com
+DOMAIN,tnc3-alisc1.snssdk.com
+DOMAIN,tnc3-aliec2.snssdk.com
+# 番茄自有上报域族: log*-applog-lf / mon*-misc-lf
+DOMAIN-KEYWORD,-applog-lf.fqnovel.com
+DOMAIN,mon3-misc-lf.fqnovel.com
+DOMAIN,mon11-misc-lf.fqnovel.com
+
+### 四、短剧 / 电商广告域
+DOMAIN-SUFFIX,ecombdapi.com
+DOMAIN-SUFFIX,ecombdimg.com
+DOMAIN,activity-ag.awemeughun.com
+DOMAIN-SUFFIX,novelapp.ixigua.com
+DOMAIN-SUFFIX,default.ixigua.com
+
+### 五、App 内嵌第三方广告 SDK
+DOMAIN,api.iegadp.qq.com
+DOMAIN,msync-im1-vip6-std.easemob.com
+DOMAIN,apd-pcdnwxlogin.teg.tencent-cloud.net

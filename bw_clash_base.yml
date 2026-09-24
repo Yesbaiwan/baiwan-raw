@@ -1,6 +1,6 @@
 ### 桌面 + iOS 通用单文件
 ### 设计: 白名单直连 + 核心服务分流，其余一律走节点；无地区/应用/特殊分组；4 策略组
-### 广告拦截: anti-AD (mihomo.mrs) + SukkaLab reject 系列
+### 广告拦截: anti-AD (mihomo.mrs) + SukkaLab reject 系列 + 番茄小说专项
 ### iOS 兼容: 规则集走 cdn.jsdelivr.net 不带 proxy 字段；fake-ip-filter 不引规则集；保留 include-all
 ### 使用: Sub-Store / 订阅转换把机场订阅合并进 include-all 策略组
 
@@ -91,6 +91,8 @@ RuleSet_classical: &RuleSet_classical { type: http, behavior: classical, interva
 
 ### 订阅规则
 rule-providers:
+    # 番茄小说去广告（仓库本地文件，与 Shadowrocket 共用同一份规则；gh-proxy 加速）
+    fanqie_ads: { <<: *RuleSet_classical, url: 'https://cdn.gh-proxy.org/https://raw.githubusercontent.com/Yesbaiwan/baiwan-raw/refs/heads/main/fanqie/fanqie_ads.list', path: ./rule_set/fanqie_ads.list }
     # 广告/骚扰拦截
     reject_non_ip_no_drop: { <<: *RuleSet_classical, url: 'https://cdn.jsdelivr.net/gh/SukkaLab/ruleset.skk.moe@master/Clash/non_ip/reject-no-drop.txt', path: ./rule_set/sukkaw_ruleset/reject_non_ip_no_drop.txt }
     reject_non_ip_drop: { <<: *RuleSet_classical, url: 'https://cdn.jsdelivr.net/gh/SukkaLab/ruleset.skk.moe@master/Clash/non_ip/reject-drop.txt', path: ./rule_set/sukkaw_ruleset/reject_non_ip_drop.txt }
@@ -128,6 +130,9 @@ rules:
     - RULE-SET,ai_domain,🚀 节点选择
     - DOMAIN-SUFFIX,jable.tv,🚀 节点选择
     # =============================================
+
+    # 番茄小说去广告（专项域名规则，先于通用广告规则；不碰正文 API 与内容图）
+    - RULE-SET,fanqie_ads,REJECT
 
     # 广告/骚扰拦截（anti-AD + SukkaLab）
     - RULE-SET,anti_ad,REJECT

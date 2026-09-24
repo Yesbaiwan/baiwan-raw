@@ -1,0 +1,46 @@
+#!name=番茄小说去广告(路径级)
+#!desc=按 URL 路径拦掉落在共享 CDN 上的番茄广告(域名级规则拦不到的那部分)
+#!author=Yesbaiwan
+#!homepage=https://github.com/Yesbaiwan/baiwan-raw
+#!icon=https://cdn.jsdelivr.net/gh/Yesbaiwan/baiwan-raw@main/dawo.jpg
+#
+# 安装: 小火箭 -> 配置 -> 模块 -> 右上角 + -> 粘贴下面地址
+#   https://cdn.gh-proxy.org/https://raw.githubusercontent.com/Yesbaiwan/baiwan-raw/refs/heads/main/fanqie/fanqie_rewrite.module
+#
+# 分工: 域名级拦截在 bw_shadowrocket.conf 的 RULE-SET 里(对应 fanqie/fanqie_ads.list), 那一层不需要证书。
+#       本模块只负责域名级拦不到的情况 —— pstatp.com 这类共享 CDN 既放正文也放广告, 只能按 URL 路径区分。
+#
+# 解密: 本模块的规则要「HTTPS 解密」开启且证书已信任才生效(URL 路径在加密流里, 不解密看不见)。
+#       不开解密时模块不生效, 但域名级拦截照常工作, 只是共享 CDN 上的广告路径会漏掉。
+#       停用本模块不影响域名级拦截。
+#
+# 来源(逐条比对后合并):
+#   https://github.com/deezertidal/shadowrocket-rules/blob/main/modules/fanqie.module
+#   https://github.com/honue/rules/blob/master/Loon/plugin/FanQieNovel.plugin
+
+[URL Rewrite]
+# > 章末 / 插屏广告视频与素材
+^https?:\/\/.+\.(pglstatp-toutiao|pstatp)\.com\/(obj|img)\/(ad-app-package|ad)\/.+ - reject
+^https?:\/\/.+\.(pglstatp-toutiao|pstatp)\.com\/(obj|img)\/web\.business\.image\/.+ - reject
+^https?:\/\/.+\.(pglstatp-toutiao|pstatp)\.com\/obj\/ad-pattern\/renderer - reject
+^https?:\/\/.+\.(pglstatp-toutiao|pstatp)\.com\/(ad-app-package|ad)\/.+ - reject
+^https?:\/\/.+\.(pglstatp-toutiao|pstatp)\.com\/obj\/ad-site-adstyle-public\/.+ - reject
+# > 埋点上报与版本包
+^https?:\/\/gurd\.snssdk\.com\/src\/server\/v3\/package - reject
+^https?:\/\/.+\.pstatp\.com\/bytecom\/resource\/track[-_]log\/src\/.+ - reject
+^https?:\/\/.+\.pstatp\.com\/obj\/mosaic-legacy\/.+\?from\=ad - reject
+# > 短剧视频广告
+^https?:\/\/v(\d)+-novelapp\.fqnovelvod\.com\/.+\/video\/.+ - reject
+# > 番茄内嵌的拼多多联盟广告
+^https?:\/\/adim\.pinduoduo\.com\/.+\/toutiao\?.+ - reject
+# > 广告图床 byteimg 的广告路径(下面两条仅明文 HTTP 命中, 不需要解密)
+^http:\/\/.+\.byteimg\.com\/ad-app-package - reject
+^http:\/\/.+\.byteimg\.com\/web\.business\.image - reject
+
+# 已知残留缺口(刻意不拦, 如需自行添加):
+#   byteimg 的 HTTPS 广告图桶 tos-cn-i-1yzifmftcy —— 要 MITM 覆盖 *.byteimg.com 才能拦。
+#   不做的原因: byteimg 是字节系图片大 CDN(抖音/头条/番茄封面都走它), 解密它开销大,
+#   且个别 App 若有证书校验会直接坏图; 广告请求域已被域名级规则拦掉, 通常不会显示出来。
+
+[MITM]
+hostname = %APPEND% *.pstatp.com, gurd.snssdk.com, *novelapp.fqnovelvod.com, adim.pinduoduo.com
