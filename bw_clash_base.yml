@@ -12,7 +12,7 @@ log-level: warning
 unified-delay: true
 tcp-concurrent: true
 global-client-fingerprint: chrome
-ipv6: false
+ipv6: true
 etag-support: true
 profile: { store-selected: true, store-fake-ip: true }
 
